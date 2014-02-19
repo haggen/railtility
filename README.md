@@ -13,10 +13,10 @@ The components are:
 1. [Authentication](#authentication)
 2. [Resourced](#resourced)
 3. [Scopable](#scopable)
-4. [Model dynamic default values](#default-values)
+4. [Default values](#default-values)
 5. [Breadcrumb](#ownership)
 6. [Ownership](#ownership)
-7s. [Authorship](#authorship)
+7. [Authorship](#authorship)
 
 ## But shouldn't it be a Gem ?
 
