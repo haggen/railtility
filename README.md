@@ -4,7 +4,7 @@
 
 ## What exactly is it ?
 
-Simply put, it's a collection of files that you copy into your application's directory for extended its functionality.
+Simply put, it's a collection of files that you copy into your application's directory to extend its functionality.
 
 ## And what does it do ?
 
