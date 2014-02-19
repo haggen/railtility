@@ -14,7 +14,7 @@ The components are:
 2. [Resourced](#resourced)
 3. [Scopable](#scopable)
 4. [Default values](#default-values)
-5. [Breadcrumb](#ownership)
+5. [Breadcrumb](#breadcrumb)
 6. [Ownership](#ownership)
 7. [Authorship](#authorship)
 
@@ -84,9 +84,7 @@ Unfortunetely it does not include e-mail confirmation nor forgot password featur
 - [Devise](https://github.com/plataformatec/devise)
 - [Authlogic](https://github.com/binarylogic/authlogic)
 
----
-
-## <a name="resourced"></a>Resourced
+## Resourced
 
 Extendable resource handling for your RESTful controllers.
 
@@ -112,7 +110,7 @@ Please note that **Resourced** component depends on the **Scopable** component.
 
 - [InheritedResources](https://github.com/josevalim/inherited_resources)
 
-## <a name="scopable"></a>Scopable
+## Scopable
 
 Bring you model' scopes to your controller and access them via request parameters.
 
@@ -150,7 +148,7 @@ Again checkout the source in `scopeable.rb` to see all the possible options.
 
 - [has_scope](https://github.com/plataformatec/has_scope)
 
-## <a name="default-values"></a>Model default values
+## Default values
 
 ...
 
@@ -162,6 +160,7 @@ Again checkout the source in `scopeable.rb` to see all the possible options.
         └── concerns
              └── default_values.rb
 ```
+
 ### Usage
 
 Inside your model's class:
@@ -174,21 +173,29 @@ end
 
 It will be lazily evaluated when the model is initialized.
 
+## Ownership
+
+### Files
+
+...
+
+### Usage
+
+...
+
+## Authorship
+
+### Files
+
+...
+
+### Usage
+
+...
+
 ---
 
-## <a name="ownership"></a>Ownership
-
-### Usage
-
-...
-
-## <a name="authorship"></a>Authorship
-
-### Usage
-
-...
-
-## Contributing
+# Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -196,6 +203,8 @@ It will be lazily evaluated when the model is initialized.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## License
+---
+
+# License
 
 See LICENSE
