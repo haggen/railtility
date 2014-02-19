@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController
+class SessionController < ApplicationController
   def new
     @session = Session.new
   end
@@ -7,8 +7,8 @@ class SessionsController < ApplicationController
     @session = Session.new(session_params)
 
     if @session.valid?
-      authorize @session.user
-      redirect_to params[:return_to] || root_path
+      authenticate! @session.user
+      redirect_to next_path(root_path)
     else
       render :new
     end

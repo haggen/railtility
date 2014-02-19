@@ -1,4 +1,4 @@
-module HasDefaultValues
+module DefaultValues
   extend ActiveSupport::Concern
 
   included do
@@ -11,11 +11,11 @@ module HasDefaultValues
       attributes[name] = value unless attributes[name]
     end
 
-    super attributes, &block
+    super(attributes, &block)
   end
 
   module ClassMethods
-    def default_to(name, value = nil, &block)
+    def default_value_for(name, value = nil, &block)
       default_values[name] = value || block
     end
   end

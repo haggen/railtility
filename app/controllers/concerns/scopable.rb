@@ -5,7 +5,7 @@ module Scopable
     cattr_accessor(:scopes) { [] }
     cattr_accessor(:current_scopes) { [] }
 
-    def self.scope(name, options = {}, &block)
+    def self.scope(name = nil, options = {}, &block)
       options.update(:name => name, :block => block)
       scopes.push(options)
     end
@@ -13,13 +13,15 @@ module Scopable
 
   def scoped(resource)
     self.scopes.each do |scope|
-      name, param, default, block = scope.values_at(:name, :param, :default, :block)
+      name, param, default, block = scope.values_at(:name, :param, :force, :default, :block)
 
       param = param || name
-      value = params[param] || default
+      value = force || params[param] || default
 
-      unless value.nil?
+      unless value.blank?
         current_scopes.push(name)
+
+        value = nil if value == 'nil'
 
         if block
           resource = block.call(resource, value, self)

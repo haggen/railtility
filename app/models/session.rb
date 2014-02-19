@@ -9,10 +9,9 @@ class Session
   validate do
     self.user = User.authenticate(email, password)
 
-    if user == nil
-      errors.add(:email, t "errors.messages.not_found")
-    elsif user == false
-      errors.add(:password, t "errors.messages.no_match")
+    case user
+      when nil errors.add(:email, :not_found)
+      when false errors.add(:password, :no_match)
     end
   end
 
