@@ -2,44 +2,46 @@ module Scopable
   extend ActiveSupport::Concern
 
   included do
-    cattr_accessor(:scopes) { [] }
-    cattr_accessor(:current_scopes) { [] }
+    cattr_accessor(:scopes) {[]}
 
     def self.scope(name = nil, options = {}, &block)
-      options.update(:name => name, :block => block)
-      scopes.push(options)
+      scopes.push options.update(:name => name, :block => block)
     end
   end
 
   def scoped(resource)
-    self.scopes.each do |scope|
-      name, param, default, block = scope.values_at(:name, :param, :force, :default, :block)
+    resource = scopes.reduce(resource) do |resource, scope|
+      name, param, force, default, block = scope.values_at(:name, :param, :force, :default, :block)
 
       param = param || name
       value = force || params[param] || default
 
-      unless value.blank?
-        current_scopes.push(name)
+      if value.blank? || value.to_s =~ /\A(false|no|off)\z/
+        resource
+      else
+        scope[:active] = true
 
+        # Cast 'nil' value
         value = nil if value == 'nil'
 
         if block
-          resource = block.call(resource, value, self)
+          block.call(resource, value, self)
         else
-          if value.to_s =~ /true|false|yes|no|on|off/
-            resource = resource.send(scope[:name])
+          if value.to_s =~ /\A(true|yes|on)\z/
+            resource.send(scope[:name])
           else
-            resource = resource.send(scope[:name], value)
+            resource.send(scope[:name], value)
           end
         end
       end
     end
 
-    case resource
-      when Hash
-        resource
-      else
-        resource.all
+    resource.try(:all) or resource
+  end
+
+  def active_scopes
+    scopes.select do |scope|
+      scope[:active] == true
     end
   end
 end
