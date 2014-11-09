@@ -2,46 +2,49 @@ module Scopable
   extend ActiveSupport::Concern
 
   included do
-    cattr_accessor(:scopes) {[]}
-
-    def self.scope(name = nil, options = {}, &block)
-      scopes.push options.update(:name => name, :block => block)
+    cattr_reader :scopes do
+      Hash.new
     end
   end
 
-  def scoped(resource)
-    resource = scopes.reduce(resource) do |resource, scope|
-      name, param, force, default, block = scope.values_at(:name, :param, :force, :default, :block)
+  def active_scopes
+    scopes.select do |name, scope|
+      scope[:active]
+    end
+  end
+
+  def scoped(resource, params)
+    scopes.each do |name, scope|
+      param, force, default, body = scope.values_at(:param, :force, :default, :body)
 
       param = param || name
       value = force || params[param] || default
 
       if value.blank? || value.to_s =~ /\A(false|no|off)\z/
-        resource
+        scope.update(:active => false)
       else
-        scope[:active] = true
+        scope.update(:active => true)
 
-        # Cast 'nil' value
         value = nil if value == 'nil'
 
-        if block
-          block.call(resource, value, self)
+        if body
+          resource = self.instance_exec(resource, value, &body)
         else
           if value.to_s =~ /\A(true|yes|on)\z/
-            resource.send(scope[:name])
+            resource = resource.send(name)
           else
-            resource.send(scope[:name], value)
+            resource = resource.send(name, value)
           end
         end
       end
     end
 
-    resource.try(:all) or resource
+    resource
   end
 
-  def active_scopes
-    scopes.select do |scope|
-      scope[:active] == true
+  module ClassMethods
+    def scope(name, options = {}, &body)
+      scopes.store name, options.merge(:body => body)
     end
   end
 end

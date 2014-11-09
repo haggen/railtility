@@ -8,11 +8,11 @@ module Ownership
       belongs_to :owner, options.merge(:class_name => CLASS_NAME)
     end
 
-    def owners_many(name, options = {})
+    def owns_many(name, options = {})
       has_many name, options.merge(:inverse_of => :owner)
     end
 
-    def owners_one(name, options = {})
+    def owns_one(name, options = {})
       has_many name, options.merge(:inverse_of => :owner)
     end
   end

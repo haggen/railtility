@@ -6,17 +6,17 @@ class SessionController < ApplicationController
   def create
     @session = Session.new(session_params)
 
-    if @session.valid?
+    if @session.save
       authenticate! @session.user
-      redirect_to next_path(root_path)
+      redirect_to(root_path)
     else
-      render :new
+      render(:new)
     end
   end
 
   def destroy
     reset_session
-    redirect_to root_path
+    redirect_to(root_path)
   end
 
   private

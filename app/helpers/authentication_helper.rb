@@ -1,8 +1,4 @@
 module AuthenticationHelper
-  def next_path(location = nil)
-    params[:next] || location || request.referrer
-  end
-
   def authenticate
     if request.headers['HTTP_AUTHORIZATION']
       authenticate_with_http_basic do |email, password|
@@ -10,21 +6,23 @@ module AuthenticationHelper
       end
     end
 
-    unless current_user
-      respond_to do |format|
-        format.html do
-          redirect_to new_session_path(:next => next_path)
-        end
-
-        format.any do
-          render :text => '', :status => :unauthorized
-        end
-      end
-    end
+    unauthorized! unless current_user
   end
 
   def authenticate!(user)
     session[:current_user] = user.try(:id)
+  end
+
+  def unauthorized!
+    respond_to do |format|
+      format.html do
+        redirect_to(new_session_path)
+      end
+
+      format.any do
+        head(:unauthorized)
+      end
+    end
   end
 
   def current_user
