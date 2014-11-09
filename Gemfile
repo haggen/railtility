@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'bcrypt-ruby', '~> 3.0'
+gem 'bcrypt', '~> 3.0'
